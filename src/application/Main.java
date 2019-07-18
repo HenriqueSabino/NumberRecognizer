@@ -1,5 +1,6 @@
 package application;
 
+import io.github.henriquesabino.training.TrainingSet;
 import services.MnistReader;
 
 import java.io.File;
@@ -7,18 +8,37 @@ import java.io.IOException;
 
 public class Main {
     
+    private static TrainingSet trainingSet = null;
+    
     public static void main(String[] args) {
         
-        File trainImages = new File("mnist data set/t10k-images.idx3-ubyte");
+        loadTrainingSet();
+    }
+    
+    private static void loadTrainingSet() {
+        
+        System.out.println("Loading training data...");
+        
+        File trainImages = new File("mnist data set/train-images.idx3-ubyte");
+        File trainLabels = new File("mnist data set/train-labels.idx1-ubyte");
         
         try {
-            double[][] set = MnistReader.readFile(trainImages);
+            double[][] imageSet = MnistReader.readFile(trainImages);
+            double[][] labelSet = MnistReader.readFile(trainLabels);
             
-            System.out.println(set.length);
-            System.out.println(set[0].length);
+            trainingSet = new TrainingSet(imageSet, labelSet);
+            
+            System.out.println("Successfully loaded training data!");
+            System.out.println("Training set size: " + trainingSet.getSize());
             
         } catch (IOException e) {
+            System.err.println("Failed loaded training data!");
             e.printStackTrace();
         }
+    }
+    
+    //temporary method, it will be replaced with a Processing sketch
+    private static void loadTestingSet() {
+    
     }
 }
